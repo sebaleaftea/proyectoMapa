@@ -1,0 +1,223 @@
+# ==========================================
+# IDE & Editor Configuration
+# ==========================================
+# IntelliJ IDEA / WebStorm / PhpStorm / PyCharm / RubyMine
+.idea/
+*.iml
+*.iws
+*.ipr
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Visual Studio Code
+.vscode/
+*.code-workspace
+
+# Eclipse
+.classpath
+.project
+.settings/
+.buildpath
+
+# NetBeans
+nbproject/
+nb-configuration.xml
+build.xml
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# ==========================================
+# Build & Compilation
+# ==========================================
+# Maven build output
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+
+# Gradle (si se agrega en el futuro)
+build/
+.gradle/
+*.gradle.bak
+
+# ==========================================
+# Application Runtime & Logs
+# ==========================================
+# Spring Boot logs
+logs/
+*.log
+*.log.*
+
+# Application output
+out/
+
+# Temporal files during execution
+*.tmp
+*.temp
+
+# ==========================================
+# System & OS Files
+# ==========================================
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Linux
+.trash/
+
+# ==========================================
+# Environment & Configuration
+# ==========================================
+# Local environment variables (NUNCA commitear)
+.env
+.env.local
+.env.*.local
+.env.prod
+.env.dev
+application-local.properties
+application-prod.properties
+application.properties
+application-dev.properties
+
+# Database files (desarrollo local)
+*.db
+*.sqlite
+*.sqlite3
+
+# ==========================================
+# Dependencies & Packages
+# ==========================================
+# Maven local repository (si se cachea localmente)
+.m2/
+.mvn/wrapper/maven-wrapper.jar
+
+# npm dependencies (si hay frontend)
+node_modules/
+npm-debug.log
+yarn-error.log
+package-lock.json
+yarn.lock
+
+# ==========================================
+# IDE Generated Files
+# ==========================================
+# Java bytecode
+*.class
+*.jar
+*.war
+*.ear
+*.nar
+
+# Generated sources & annotations
+**/generated-sources/
+**/generated-test-sources/
+**/annotations/
+.apt_generated/
+.apt_generated_test/
+
+# ==========================================
+# IDE Cache & Metadata
+# ==========================================
+.metadata/
+.factorypath
+*.code-workspace.swp
+
+# ==========================================
+# Testing
+# ==========================================
+# Test coverage reports
+coverage/
+*.gcda
+*.gcno
+jacoco.xml
+
+# Test artifacts
+test-results/
+surefire-reports/
+
+# ==========================================
+# Temporary & Build Artifacts
+# ==========================================
+# Maven helper files
+.mvn/
+mvnw
+mvnw.cmd
+.mvn/wrapper/
+
+# Temporary files
+*.orig
+*.rej
+*.bak
+~*
+.~*
+
+# ==========================================
+# IDE Workspace Files
+# ==========================================
+# Local workspace settings
+.workspace/
+.vscode-test/
+
+# ==========================================
+# API Keys & Secrets (CRÍTICO)
+# ==========================================
+# Nunca commitear credenciales, claves API, tokens
+*.key
+*.pem
+*.p8
+*.p12
+*.pfx
+*.crt
+*.cer
+*.cert
+
+# Cloud & Azure credentials
+azure-credentials.json
+.azure/
+.cloud.json
+
+# ==========================================
+# Docker & Containerization
+# ==========================================
+# Docker compose files locales con credenciales
+docker-compose.override.yml
+.dockerignore
+
+# ==========================================
+# IDE Plugin Directories
+# ==========================================
+.idea/plugins/
+.idea/libraries/
+.idea/modules/
+.idea/workspace.xml
+.idea/tasks.xml
+.idea/shelf/
+
+# ==========================================
+# Otros
+# ==========================================
+# Backup files
+*.backup
+*.bkp
+backup/
+
+# Archive files
+*.zip
+*.tar.gz
+*.rar
+*.7z

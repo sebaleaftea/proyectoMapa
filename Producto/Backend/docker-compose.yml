@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  accesimap-db:
+    image: postgis/postgis:16-3.4
+    container_name: accesimap-postgis
+    environment:
+      - POSTGRES_PASSWORD=secret
+      - POSTGRES_DB=accesimap_db
+      - POSTGRES_USER=postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - accesimap_pgdata:/var/lib/postgresql/data
+    restart: unless-stopped
+
+volumes:
+  accesimap_pgdata:

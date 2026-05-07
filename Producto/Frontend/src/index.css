@@ -1,0 +1,95 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+
+  html {
+    font-family: 'Roboto', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    margin: 0;
+    background-color: #FAFAFA;
+    color: #121212;
+  }
+
+  #root {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  :focus-visible {
+    outline: 3px solid #0056B3;
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  button,
+  a,
+  input,
+  select,
+  textarea {
+    font-family: inherit;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-primary text-white font-semibold rounded-lg px-6 py-3 min-h-touch min-w-touch
+           hover:bg-primary-hover active:scale-95 transition-all duration-150
+           focus-visible:outline focus-visible:outline-3 focus-visible:outline-primary
+           disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100
+           flex items-center justify-center gap-2;
+  }
+
+  .btn-secondary {
+    @apply border-2 border-primary text-primary font-semibold rounded-lg px-6 py-3 min-h-touch
+           hover:bg-primary/10 active:scale-95 transition-all duration-150
+           focus-visible:outline focus-visible:outline-3 focus-visible:outline-primary
+           disabled:opacity-50 disabled:cursor-not-allowed
+           flex items-center justify-center gap-2 bg-transparent;
+  }
+
+  .btn-accent {
+    @apply bg-accent text-white font-semibold rounded-lg px-6 py-3 min-h-touch
+           hover:bg-orange-600 active:scale-95 transition-all duration-150
+           flex items-center justify-center gap-2;
+  }
+
+  .card {
+    @apply bg-bg-surface rounded-xl shadow-card border border-border p-4;
+  }
+
+  .input-field {
+    @apply w-full border border-border rounded-lg px-4 py-3 text-body-large text-text-primary
+           bg-bg-surface placeholder:text-text-secondary
+           focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20
+           transition-colors duration-150;
+  }
+
+  .status-badge {
+    @apply inline-flex items-center gap-1 px-2 py-1 rounded-full text-caption font-medium;
+  }
+
+  .status-validated {
+    @apply status-badge bg-status-validated-bg text-status-validated;
+  }
+
+  .status-pending {
+    @apply status-badge bg-status-pending-bg text-status-pending;
+  }
+
+  .status-rejected {
+    @apply status-badge bg-status-rejected-bg text-status-rejected;
+  }
+}
