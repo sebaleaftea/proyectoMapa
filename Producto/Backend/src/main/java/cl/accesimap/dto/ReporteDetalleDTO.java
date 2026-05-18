@@ -24,4 +24,16 @@ public class ReporteDetalleDTO {
     private Float nivelConfianzaIa;
     private LocalDateTime fechaCreacion;
     private LocalDateTime fechaActualizacion;
+
+    // === NUEVOS CAMPOS: VALIDACIÓN CIUDADANA ===
+    /**
+     * Porcentaje de aprobación ciudadana: (Validaciones Positivas / Total) * 100
+     * Null si no hay validaciones ciudadanas aún
+     */
+    private Double porcentajeCiudadano;
+
+    /**
+     * Total de validaciones ciudadanas realizadas para este reporte
+     */
+    private Integer totalValidacionesCiudadanas;
 }

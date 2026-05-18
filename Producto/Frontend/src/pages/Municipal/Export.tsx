@@ -16,9 +16,9 @@ const CATEGORIAS: Array<{ value: ReportCategory | 'TODAS'; label: string }> = [
 
 const COMUNAS: Array<{ value: Comuna | 'TODAS'; label: string }> = [
   { value: 'TODAS', label: 'Todas las comunas' },
-  { value: 'Santiago Centro', label: 'Santiago Centro' },
+  { value: 'Las Condes', label: 'Las Condes' },
+  { value: 'Providencia', label: 'Providencia' },
   { value: 'Ñuñoa', label: 'Ñuñoa' },
-  { value: 'La Reina', label: 'La Reina' },
 ]
 
 type DownloadState = 'geojson' | 'shapefile' | null

@@ -107,9 +107,27 @@ public class ReporteController {
             reportes = reporteRepository.findAll(); // Cuidado en prod sin limite
         }
 
+        List<ReporteDetalleDTO> reportesDTO = reportes.stream()
+                .map(r -> ReporteDetalleDTO.builder()
+                        .id(r.getId())
+                        .usuarioId(r.getUsuario().getId())
+                        .categoria(r.getCategoria())
+                        .descripcion(r.getDescripcion())
+                        .fotoUrl(r.getFotoUrl())
+                        .latitud(r.getUbicacion().getY())
+                        .longitud(r.getUbicacion().getX())
+                        .estado(r.getEstado())
+                        .estadoElemento(r.getEstadoElemento())
+                        .justificacionIa(r.getJustificacionIa())
+                        .nivelConfianzaIa(r.getNivelConfianzaIa())
+                        .fechaCreacion(r.getFechaCreacion())
+                        .fechaActualizacion(r.getFechaActualizacion())
+                        .build())
+                .collect(java.util.stream.Collectors.toList());
+
         Map<String, Object> response = new HashMap<>();
-        response.put("data", reportes);
-        response.put("count", reportes.size());
+        response.put("data", reportesDTO);
+        response.put("count", reportesDTO.size());
         
         return ResponseEntity.ok(response);
     }

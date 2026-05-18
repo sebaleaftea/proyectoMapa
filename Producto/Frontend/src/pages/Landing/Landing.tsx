@@ -1,7 +1,9 @@
-import { Link } from 'react-router-dom'
-import { MapPin, Camera, Trophy, CheckCircle, ArrowRight, Building2, Users, Scale } from 'lucide-react'
+import { Link, useNavigate } from 'react-router-dom'
+import { MapPin, Camera, Trophy, CheckCircle, ArrowRight, Building2, Users, Scale, X } from 'lucide-react'
 import { Button } from '../../components/ui/Button'
 import { Card, CardContent } from '../../components/ui/Card'
+import { useState } from 'react'
+import { useAuthStore } from '../../store/authStore'
 
 const steps = [
   { icon: Camera, title: 'Fotografía la barrera', description: 'Detecta una rampa dañada, ascensor averiado o baño no adaptado y toma una foto desde tu teléfono.' },
@@ -12,7 +14,7 @@ const steps = [
 const stats = [
   { value: '282', label: 'Reportes validados', description: 'en 3 comunas piloto' },
   { value: '85%', label: 'Precisión mínima', description: 'garantizada por IA' },
-  { value: '3', label: 'Comunas piloto', description: 'Santiago Centro, Ñuñoa, La Reina' },
+  { value: '3', label: 'Comunas piloto', description: 'Las Condes , Providencia y Ñuñoa' },
 ]
 
 const stakeholders = [
@@ -22,7 +24,18 @@ const stakeholders = [
 ]
 
 export function Landing() {
+  const { isAuthenticated, user } = useAuthStore()
+  const navigate = useNavigate()
+  const [showMunicipalModal, setShowMunicipalModal] = useState(false)
+
+  const handleReportarClick = () => {
+    if (!isAuthenticated) return navigate('/login')
+    if (user?.role === 'CIUDADANO') return navigate('/reportar')
+    setShowMunicipalModal(true)
+  }
+
   return (
+    <>
     <main>
       <section
         className="bg-primary text-white py-20 px-4"
@@ -41,17 +54,16 @@ export function Landing() {
             transformando reportes fotográficos en datos geoespaciales accionables para un Santiago más inclusivo.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <Link to="/login">
-              <Button
-                size="lg"
-                variant="accent"
-                className="w-full sm:w-auto"
-                aria-label="Reportar una barrera ahora"
-              >
-                <Camera className="w-5 h-5" aria-hidden="true" />
-                Reportar una barrera
-              </Button>
-            </Link>
+            <Button
+              size="lg"
+              variant="accent"
+              className="w-full sm:w-auto"
+              aria-label="Reportar una barrera ahora"
+              onClick={handleReportarClick}
+            >
+              <Camera className="w-5 h-5" aria-hidden="true" />
+              Reportar una barrera
+            </Button>
             <Link to="/mapa">
               <Button
                 size="lg"
@@ -67,7 +79,7 @@ export function Landing() {
         </div>
       </section>
 
-      <section className="py-12 bg-bg-app border-b border-border" aria-label="Estadísticas del proyecto">
+      <section className="py-12 bg-bg-app dark:bg-gray-950 border-b border-border dark:border-gray-800" aria-label="Estadísticas del proyecto">
         <div className="max-w-4xl mx-auto px-4">
           <ul className="grid grid-cols-1 sm:grid-cols-3 gap-6" role="list">
             {stats.map(({ value, label, description }) => (
@@ -109,7 +121,7 @@ export function Landing() {
         </ol>
       </section>
 
-      <section className="py-16 px-4 bg-bg-app border-y border-border" aria-labelledby="stakeholders">
+      <section className="py-16 px-4 bg-bg-app dark:bg-gray-950 border-y border-border dark:border-gray-800" aria-labelledby="stakeholders">
         <div className="max-w-4xl mx-auto">
           <h2 id="stakeholders" className="text-display font-bold text-text-primary text-center mb-10">
             ¿Para quién es AccesiMap CL?
@@ -153,7 +165,7 @@ export function Landing() {
         </div>
       </section>
 
-      <section className="py-10 px-4 bg-primary/5 border-t border-border">
+      <section className="py-10 px-4 bg-primary/5 dark:bg-gray-800/40 border-t border-border dark:border-gray-800">
         <div className="max-w-4xl mx-auto text-center">
           <p className="text-caption text-text-secondary">
             AccesiMap CL opera en cumplimiento de la{' '}
@@ -179,5 +191,47 @@ export function Landing() {
         </div>
       </section>
     </main>
+
+    {showMunicipalModal && (
+      <div
+        className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="municipal-modal-title"
+        onClick={() => setShowMunicipalModal(false)}
+      >
+        <div
+          className="bg-bg-surface rounded-2xl shadow-xl max-w-sm w-full p-6"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <div className="flex items-start justify-between mb-4">
+            <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
+              <Camera className="w-6 h-6 text-primary" aria-hidden="true" />
+            </div>
+            <button
+              onClick={() => setShowMunicipalModal(false)}
+              className="p-1.5 rounded-full hover:bg-gray-100 text-text-secondary transition-colors"
+              aria-label="Cerrar"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          </div>
+          <h2 id="municipal-modal-title" className="text-heading-1 font-bold text-text-primary mb-2">
+            Opción no disponible
+          </h2>
+          <p className="text-body text-text-secondary leading-relaxed">
+            Esta función está disponible solo para ciudadanos. Si deseas reportar una barrera, puedes iniciar sesión con una cuenta ciudadana.
+          </p>
+          <Button
+            variant="primary"
+            className="w-full mt-5"
+            onClick={() => { setShowMunicipalModal(false); navigate('/login') }}
+          >
+            Iniciar sesión como ciudadano
+          </Button>
+        </div>
+      </div>
+    )}
+    </>
   )
 }

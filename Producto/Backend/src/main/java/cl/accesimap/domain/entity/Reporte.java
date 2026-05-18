@@ -28,6 +28,10 @@ public class Reporte {
     @JoinColumn(name = "usuario_id", nullable = false)
     private Usuario usuario;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "comuna_id")
+    private Comuna comuna; // Se asigna automáticamente si las coordenadas están dentro del polígono
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 50)
     private CategoriaInfraestructura categoria;

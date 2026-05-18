@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 export default {
+  darkMode: 'class',
   content: ['./index.html', './src/**/*.{ts,tsx}'],
   theme: {
     extend: {
@@ -14,15 +15,15 @@ export default {
           foreground: '#FFFFFF',
         },
         bg: {
-          app: '#FAFAFA',
-          surface: '#FFFFFF',
+          app: 'var(--bg-app, #FAFAFA)',
+          surface: 'var(--bg-surface, #FFFFFF)',
           map: '#E9E5DC',
         },
         text: {
-          primary: '#121212',
-          secondary: '#5F6368',
+          primary: 'var(--text-primary, #121212)',
+          secondary: 'var(--text-secondary, #5F6368)',
         },
-        border: '#E0E0E0',
+        border: 'var(--border, #E0E0E0)',
         status: {
           validated: '#1B5E20',
           'validated-bg': '#E8F5E9',

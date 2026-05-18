@@ -2,6 +2,7 @@ package cl.accesimap.controller;
 
 import cl.accesimap.dto.AuthResponse;
 import cl.accesimap.dto.LoginRequest;
+import cl.accesimap.dto.RegistroRequest;
 import cl.accesimap.domain.entity.Usuario;
 import cl.accesimap.domain.enums.RolUsuario;
 import cl.accesimap.repository.UsuarioRepository;
@@ -36,22 +37,28 @@ public class AuthController {
 
         String token = jwtUtil.generateToken(user.getEmail(), user.getRol().name(), user.getId().toString());
 
-        return ResponseEntity.ok(new AuthResponse(token, user.getId().toString(), user.getRol().name()));
+        return ResponseEntity.ok(new AuthResponse(token, user.getId().toString(), user.getRol().name(), user.getNombreUsuario()));
     }
     
     @PostMapping("/registro")
-    public ResponseEntity<?> registrarCiudadano(@Valid @RequestBody LoginRequest request) {
+    public ResponseEntity<?> registrarCiudadano(@Valid @RequestBody RegistroRequest request) {
         if(usuarioRepository.findByEmail(request.getEmail()).isPresent()) {
-            throw new RuntimeException("Email ya registrado");
+            throw new RuntimeException("El correo electrónico ya se encuentra registrado");
         }
         
         Usuario newUser = new Usuario();
         newUser.setEmail(request.getEmail());
+        newUser.setNombreUsuario(request.getNombreUsuario().trim());
         newUser.setPasswordHash(passwordEncoder.encode(request.getPassword()));
         newUser.setRol(RolUsuario.CIUDADANO);
+        newUser.setEsAnonimo(request.getEsAnonimo() != null ? request.getEsAnonimo() : false);
         
         usuarioRepository.save(newUser);
+
+        // Generar token JWT para auto-login tras registro
+        String token = jwtUtil.generateToken(newUser.getEmail(), newUser.getRol().name(), newUser.getId().toString());
         
-        return ResponseEntity.ok("Usuario registrado exitosamente");
+        return ResponseEntity.ok(new AuthResponse(token, newUser.getId().toString(), newUser.getRol().name(), newUser.getNombreUsuario()));
     }
 }
+

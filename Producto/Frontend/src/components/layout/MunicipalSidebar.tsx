@@ -1,10 +1,11 @@
 import { NavLink, useNavigate } from 'react-router-dom'
-import { LayoutDashboard, Download, LogOut, MapPin } from 'lucide-react'
+import { LayoutDashboard, Download, LogOut, MapPin, TrendingUp } from 'lucide-react'
 import { cn } from '../../lib/utils'
 import { useAuthStore } from '../../store/authStore'
 
 const navItems = [
-  { to: '/municipal/dashboard', icon: LayoutDashboard, label: 'Dashboard Comunal' },
+  { to: '/municipal/dashboard', icon: LayoutDashboard, label: 'Dashboard Operativo' },
+  { to: '/municipal/dashboard-riesgo', icon: TrendingUp, label: 'Riesgo y Multas' },
   { to: '/municipal/exportar', icon: Download, label: 'Exportación GIS' },
 ]
 

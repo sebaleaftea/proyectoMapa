@@ -3,7 +3,7 @@ import type { Report, ComunaStats, Comuna } from '../types'
 import { reportService } from '../services/reportService'
 
 function computeStats(reports: Report[]): ComunaStats[] {
-  const comunas: Comuna[] = ['Santiago Centro', 'Ñuñoa', 'La Reina']
+  const comunas: Comuna[] = ['Las Condes', 'Providencia', 'Ñuñoa']
   return comunas.map((comuna) => {
     const comunaReports = reports.filter((r) => r.comuna === comuna)
     return {

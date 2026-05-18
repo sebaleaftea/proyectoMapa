@@ -2,7 +2,7 @@
 export type ReportStatus = 'PENDIENTE' | 'VALIDADO' | 'RECHAZADO'
 export type ReportCategory = 'RAMPA' | 'ASCENSOR' | 'BAÑO'
 export type UserRole = 'CIUDADANO' | 'MUNICIPALIDAD' | 'ADMINISTRADOR'
-export type Comuna = 'Santiago Centro' | 'Ñuñoa' | 'La Reina'
+export type Comuna = 'Las Condes' | 'Providencia' | 'Ñuñoa'
 
 export interface Coordinates {
   lat: number
@@ -48,6 +48,7 @@ export interface LoginRequest {
 }
 
 export interface RegisterRequest {
+  nombreUsuario: string
   email: string
   password: string
   esAnonimo?: boolean
@@ -57,6 +58,7 @@ export interface AuthResponse {
   token: string
   userId: string
   role: UserRole
+  nombreUsuario: string
 }
 
 export interface User {
@@ -66,24 +68,22 @@ export interface User {
   role: UserRole
   points: number
   avatarUrl?: string
-  isAnonymous: boolean
   token: string
   comuna?: Comuna
+  isAnonymous?: boolean
 }
 
 // Gamificación — respuesta de GET /ranking
 export interface RankingEntryAPI {
-  usuarioId: string
-  nombre: string
-  esAnonimo: boolean
-  puntos: number
-  cantidadReportes: number
   posicion: number
+  id: string
+  puntos: number
+  email: string
 }
 
 export interface RankingEntry {
   position: number
-  user: { id: string; name: string; isAnonymous: boolean }
+  user: { id: string; name: string }
   points: number
   reportsCount: number
 }
@@ -111,9 +111,15 @@ export interface ReporteDetalleAPI {
   estadoElemento?: string
   justificacionIa?: string
   nivelConfianzaIa?: number
+
+  // Gamificación / Validación ciudadana
+  porcentajeCiudadano?: number | null
+  totalValidacionesCiudadanas?: number | null
+
   fechaCreacion: string
   fechaActualizacion: string
 }
+
 
 // Wrapper estándar de respuestas del backend
 export interface ApiResponse<T> {

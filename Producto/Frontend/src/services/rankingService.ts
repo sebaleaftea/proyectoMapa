@@ -4,21 +4,29 @@ import type { RankingEntryAPI, RankingEntry } from '../types'
 function normalizeEntry(r: RankingEntryAPI): RankingEntry {
   return {
     position: r.posicion,
-    user: { id: r.usuarioId, name: r.nombre, isAnonymous: r.esAnonimo },
+    user: { id: r.usuarioId, name: r.nombre || 'Usuario' },
     points: r.puntos,
-    reportsCount: r.cantidadReportes,
+    reportsCount: Math.floor(r.puntos / 10),
   }
 }
 
+export interface MisPuntosResponse {
+  id: string;
+  email: string;
+  puntos: number;
+  posicion: number;
+}
+
 export const rankingService = {
-  getranking: async (): Promise<RankingEntry[]> => {
-    const res = await api.get<RankingEntryAPI[]>('/ranking')
-    const lista = Array.isArray(res.data) ? res.data : (res.data as any).data ?? []
+  getranking: async (tipo: 'global' | 'mensual'): Promise<RankingEntry[]> => {
+    const res = await api.get<RankingEntryAPI[]>(`/ranking?tipo=${tipo}`)
+    const lista: RankingEntryAPI[] = Array.isArray(res.data) ? res.data : ((res.data as { data: RankingEntryAPI[] }).data ?? [])
     return lista.map(normalizeEntry)
   },
 
-  getMisPuntos: async (): Promise<number> => {
-    const res = await api.get<{ puntos: number } | number>('/usuarios/me/puntos')
-    return typeof res.data === 'number' ? res.data : (res.data as any).puntos ?? 0
+  getMisPuntos: async (tipo: 'global' | 'mensual', token?: string): Promise<MisPuntosResponse> => {
+    const headers = token ? { Authorization: `Bearer ${token}` } : undefined
+    const res = await api.get<MisPuntosResponse>(`/usuarios/me/puntos?tipo=${tipo}`, { headers })
+    return res.data
   },
 }

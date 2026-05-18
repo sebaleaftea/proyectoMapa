@@ -21,7 +21,6 @@ const MAP_STYLES = [
 ]
 
 interface AccesiMapProps {
-  filterStatus?: ReportStatus
   height?: string
   showOnlyValidated?: boolean
 }
@@ -37,9 +36,11 @@ export function AccesiMap({ height = '100%', showOnlyValidated = false }: Accesi
   const { reports, selectedComuna } = useReportStore()
   const [modalData, setModalData] = useState<ReporteDetalleAPI | null>(null)
   const [modalLoading, setModalLoading] = useState(false)
+  const [selectedReportId, setSelectedReportId] = useState('')
   const mapRef = useRef<google.maps.Map | null>(null)
 
   const handleMarkerClick = useCallback(async (reportId: string) => {
+    setSelectedReportId(reportId)
     setModalData(null)
     setModalLoading(true)
     try {
@@ -63,6 +64,10 @@ export function AccesiMap({ height = '100%', showOnlyValidated = false }: Accesi
 
   const onLoad = useCallback((map: google.maps.Map) => {
     mapRef.current = map
+  }, [])
+
+  const onUnmount = useCallback(() => {
+    mapRef.current = null
   }, [])
 
   if (loadError || !GMAPS_KEY) {
@@ -115,6 +120,7 @@ export function AccesiMap({ height = '100%', showOnlyValidated = false }: Accesi
           center={SANTIAGO_CENTER}
           zoom={14}
           onLoad={onLoad}
+          onUnmount={onUnmount}
           options={{
             styles: MAP_STYLES,
             disableDefaultUI: false,
@@ -143,7 +149,7 @@ export function AccesiMap({ height = '100%', showOnlyValidated = false }: Accesi
         </GoogleMap>
       </div>
 
-      <ReporteModal data={modalData} loading={modalLoading} onClose={closeModal} />
+      <ReporteModal data={modalData} loading={modalLoading} reporteId={selectedReportId} onClose={closeModal} />
     </>
   )
 }

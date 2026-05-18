@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { Building2, User, EyeOff, Eye, MapPin } from 'lucide-react'
+import { useNavigate, Link } from 'react-router-dom'
+import { Building2, User, EyeOff, Eye, MapPin, UserPlus } from 'lucide-react'
 import { Button } from '../../components/ui/Button'
 import { Input } from '../../components/ui/Input'
 import { Card, CardContent } from '../../components/ui/Card'
@@ -20,44 +20,36 @@ export function Login() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault()
     setLoading(true)
     setError(null)
     try {
       const auth = await authService.login({ email, password })
-      let points = 0
-      if (auth.role === 'CIUDADANO') {
-        try { points = await rankingService.getMisPuntos() } catch { /* sin puntos aún */ }
-      }
+
       login({
         id: auth.userId,
-        name: email.split('@')[0],
+        name: auth.nombreUsuario ?? email.split('@')[0],
         email,
         role: auth.role,
-        points,
-        isAnonymous: false,
+        points: 0,
         token: auth.token,
+        isAnonymous: false,
       })
-      navigate(auth.role === 'MUNICIPALIDAD' || auth.role === 'ADMINISTRADOR' ? '/municipal/dashboard' : '/mapa')
+
+      if (auth.role === 'CIUDADANO') {
+        try { 
+          const puntosData = await rankingService.getMisPuntos('global')
+          useAuthStore.getState().updatePoints(Number(puntosData.puntos) || 0)
+        } catch { /* sin puntos aún */ }
+      }
+
+      navigate(auth.role === 'MUNICIPALIDAD' || auth.role === 'ADMINISTRADOR' ? '/municipal/dashboard' : '/inicio')
     } catch (e: any) {
       setError(e?.response?.data?.message ?? 'Credenciales incorrectas. Verifica tu email y contraseña.')
     } finally {
       setLoading(false)
     }
-  }
-
-  const handleAnonymous = () => {
-    login({
-      id: 'anon',
-      name: 'Anónimo',
-      email: '',
-      role: 'CIUDADANO',
-      points: 0,
-      isAnonymous: true,
-      token: '',
-    })
-    navigate('/mapa')
   }
 
   return (
@@ -165,16 +157,15 @@ export function Login() {
                   <span className="text-caption text-text-secondary">o</span>
                   <div className="flex-1 h-px bg-border" aria-hidden="true" />
                 </div>
-                <Button
-                  variant="ghost"
-                  size="md"
-                  onClick={handleAnonymous}
-                  className="w-full text-text-secondary hover:text-text-primary"
-                  aria-label="Continuar como usuario anónimo sin registrarse"
-                >
-                  <EyeOff className="w-4 h-4" aria-hidden="true" />
-                  Continuar de forma anónima
-                </Button>
+                <div className="flex flex-col gap-2">
+                  <Link
+                    to="/registro"
+                    className="flex items-center justify-center gap-2 w-full text-body font-medium text-text-secondary hover:text-text-primary transition-colors py-2 border border-border rounded-lg hover:bg-bg-surface"
+                  >
+                    <UserPlus className="w-4 h-4" aria-hidden="true" />
+                    No tienes cuenta — Regístrate
+                  </Link>
+                </div>
               </>
             )}
           </CardContent>
